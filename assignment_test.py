@@ -1,6 +1,7 @@
 
 """
-test.py - Unit Tests for Student Implementations
+assignment_test.py - Test module, not really unitest although it makes unitest.
+My decition to change it so I can give better feedback without the traceback.
 
 This module contains unit tests designed to verify the correctness of student 
 implementations for the exercise ce_th_assignment.ipynb. The tests will:
@@ -24,7 +25,41 @@ def test_task1(perceptron_forward):
     def sigmoid(z):
         return 1/(1+np.exp(-z))
     
-    # Test 1: correctness_sample using the provided example
+    # Test 1: Check the activation function is aplied
+    def activation_applied():
+        X = np.array([1.0, 1.0, 1.0])
+        W = 10*np.identity(3)
+        b = np.zeros((1, 3))
+        expected = my_perceptron_forward(X, W, b)
+        output = perceptron_forward(X, W, b)
+        fail_msg = (
+            "\n[❌Activation applied sample test FAILED]\n"
+            "The forward result is not the expected,\n"
+            "it seeems like you fail to apply the activation function.\n"
+        )
+        if np.allclose(output, expected):
+            print("✅ Test: Activation function applied ... passed ")
+        else:
+            print(fail_msg)
+    
+    # Test 2: Check the bias is added
+    def bias_added():
+        X = np.array([1.0, 1.0, 1.0])
+        W = np.zeros((3,3))
+        b = 10*np.ones((1, 3))
+        expected = my_perceptron_forward(X, W, b)
+        output = perceptron_forward(X, W, b)
+        fail_msg = (
+            "\n[❌Bias added sample test FAILED]\n"
+            "The forward result is not the expected,\n"
+            "it seeems like you might not have added the bias.\n"
+        )
+        if np.allclose(output, expected):
+            print("✅ Test: Bias added ... passed ")
+        else:
+            print(fail_msg)
+  
+    # Test 3: correctness_sample using the provided example
     def correctness_sample():
         X = np.array([0.9, 0.7, 0.3])
         W = np.array([
@@ -32,23 +67,47 @@ def test_task1(perceptron_forward):
             [-1, 0, -1],
             [0.1, 1, 0.1]])
         b = np.array([-1.0, 0.1, 0.001])
-        expected_output = my_perceptron_forward(x, W, b, activation=sigmoid)
+        expected_output = my_perceptron_forward(X, W, b, activation=sigmoid)
         output = perceptron_forward(X, W, b)
-        assert np.allclose(output, expected_output), "Failed correctness_sample test"
-        print("correctness_sample test passed")
+        fail_msg = (
+            "\n[❌Correctness Sample test FAILED]\n"
+            "The forward result is not the expected, you might want to check the following:\n"
+            "   - The order of matrix multiplication.\n"
+            "   - Is the bias term present?\n"
+            "   - The activation function is correctly applied.\n"
+            "    - Did you use the np.dot to compute the matrix product?\n"
+        )
+        if np.allclose(output, expected_output):
+            print("✅ Test: Basic pass forward ... passed ")
+        else:  
+            print(fail_msg)
+        
 
-    # Test 2: correctness_3_3
-    def correctness_3_3():
+    # Test 4: correctness_3_1
+    def correctness_3_1():
         X = np.array([1.0, 2.0, 3.0])
         W = np.array([
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]])
-        b = np.array([0.1, 0.2, 0.3])
-        expected_output = sigmoid(np.dot(W, X) + b)
-        output = perceptron_forward(X, W, b)
-        assert np.allclose(output, expected_output), "Failed correctness_3_3 test"
-        print("correctness_3_3 test passed")
+            [1, 4, 7]
+            ])
+        b = np.array([0.1,])
+        try:
+            expected_output = sigmoid(np.dot(W, X) + b)
+            output = perceptron_forward(X, W, b)
+        except ValueError:
+            expected_output = np.zeros((2,2))
+            output = np.zeros((1,2))
+        fail_msg = (
+            "\n[❌Three inputs single output test FAILED]\n"
+            "The forward result is not the expected.\n"
+            "   - Check the order of matrix multiplication.\n"            
+            "   - Recall that although np.matmul and np.dot are similar have small similarities\n"
+            "     specially when using 1D arrays.\n"
+        )
+        if output.shape == expected_output.shape:
+            print("✅ Test: Three inputs single output test ... passed ")
+        else:
+            print(fail_msg)
+            
 
     # Test 3: correctness_2_3
     def correctness_2_3():
@@ -76,10 +135,7 @@ def test_task1(perceptron_forward):
     # Test 5: zero inputs
     def zero_inputs():
         X = np.zeros(3)
-        W = np.array([
-            [1, 0, 1],
-            [0, 1, 0],
-            [1, 0, 1]])
+        W = np.identity(3)
         b = np.array([0, 0, 0])
         expected_output = sigmoid(b)
         output = perceptron_forward(X, W, b)
@@ -109,6 +165,7 @@ def test_task1(perceptron_forward):
         b = np.array([1.0, 1.0, 1.0])
         expected_output = sigmoid(X + b)
         output = perceptron_forward(X, W, b)
+
         assert np.allclose(output, expected_output), "Failed bias_well_managed test"
         print("bias_well_managed test passed")
 
@@ -126,8 +183,10 @@ def test_task1(perceptron_forward):
         print("weights_correctly_applied test passed")
 
     # Run all tests
+    activation_applied()
+    bias_added()
     correctness_sample()
-    correctness_3_3()
+    correctness_3_1()
     correctness_2_3()
     zero_weights()
     zero_inputs()
