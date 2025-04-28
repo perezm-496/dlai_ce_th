@@ -6,7 +6,8 @@ def sigmoid(z):
 def my_perceptron_forward(x, W, b, activation=sigmoid):
     """
     Correct solution for task1
-    Computes the passforward for a feture input X
+    Computes the passforward for a feture input X of shape (N,) and
+    weight matrix W of shape (M, N).
     """
-    return activation(np.dot(W, x) +b)
-
+    return activation(np.matmul(W, x) +b)
+ 
