@@ -8,23 +8,23 @@ To set up the project locally, follow these instructions:
 
 1. Clone the repository:
 
-   \```   
+   ```   
    git clone https://github.com/perezm-496/dlai_ce_th.git
    cd dlai_ce_th
-   \```
+   ```
 
 2. Ensure that Docker is installed on your machine. Build the Docker image:
 
-   \```
+   ```
    docker build -t sample-jupyter-exercise .
-   \```
+   ```
 
 
 3. Run the Docker container:
 
-   \```
+   ```
    docker run -p 8888:8888 sample-jupyter-exercise
-   \```
+   ```
 
 4. Open your web browser and navigate to `http://localhost:8888` to access the Jupyter Notebook interface.
 
