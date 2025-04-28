@@ -15,5 +15,8 @@ def my_perceptron_forward(x, W, b, activation=sigmoid):
     Computes the passforward for a feture input X of shape (N,) and
     weight matrix W of shape (M, N).
     """
-    return activation(np.matmul(W, x) +b)
+    # ToDo: Manage the exceptional cases where the shape don't match, but keep it functional for check.
+    z = np.matmul(W, x) + b
+    a = activation(z)
+    return a
  
