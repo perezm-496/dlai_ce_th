@@ -1,5 +1,4 @@
-# Use the official Jupyter base image with Python
-FROM jupyter/base-notebook
+FROM jupyter/scipy-notebook
 
 # Create a directory for notebooks in the container
 RUN mkdir -p /home/jovyan/work
